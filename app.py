@@ -12,7 +12,6 @@ SUPABASE_KEY = st.secrets["SUPABASE_ANON_KEY"]
 
 # 開発用のカスタムクライアント定義（SSL検証なし）
 import ssl
-from supabase import create_client
 from httpx import Client as HttpxClient
 from supabase.client import ClientOptions
 import os

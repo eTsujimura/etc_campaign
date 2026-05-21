@@ -1,0 +1,6 @@
+supabase
+st-supabase-connection
+datetime
+ssl
+httpx
+os
