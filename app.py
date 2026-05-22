@@ -1,16 +1,17 @@
 import streamlit as st
 from supabase import create_client
 from datetime import datetime
+import pandas as pd
 
 # =====================
 # 設定
 # =====================
-MAX_LIMIT = 100  # 上限数
+MAX_LIMIT = 10  # 上限数
 
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_ANON_KEY"]
 
-# 開発用のカスタムクライアント定義（SSL検証なし）
+# （SSL検証なし）
 import ssl
 from httpx import Client as HttpxClient
 from supabase.client import ClientOptions
@@ -23,17 +24,28 @@ options = ClientOptions(httpx_client=http_client)
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY, options)
 
 # =====================
-# 現在の受付数取得
+# Get current count
 # =====================
 count_response = supabase.table("entries").select("id", count="exact").execute()
 current_count = count_response.count or 0
 
 # =====================
-# UI
+# Display
 # =====================
-st.title("受付状況")
+st.title("ETCキャンペーン受付状況")
+st.warning("対象モデルはScrambler 400X/400XC SPEED 400です。")
 
-st.write(f"現在の受付数：**{current_count} / {MAX_LIMIT}**")
+
+cnt = f"**{current_count} / {MAX_LIMIT}**"
+st.metric(label="現在の受付数", value=cnt,)
+
+# =====================
+# Input
+# =====================
+name = st.text_input("ディーラー名")
+vin = st.text_input("VIN")
+# st.warning("VIN以外も入力可能ですが、公開URLですのでお客様の名前などは入力しないでください")
+
 
 # =====================
 # 受付可能判定
@@ -42,13 +54,18 @@ if current_count >= MAX_LIMIT:
     st.error("受付は終了しました。")
     st.stop()
 
-st.success("受付可能です")
+# st.success("受付可能です")
 
 # =====================
 # 申込ボタン
 # =====================
 if st.button("申し込む"):
-    # --- 最終二重チェック（超重要） ---
+    
+    if not name or not vin:
+        st.warning("ディーラー名とVINを入力してください")
+        st.stop()
+
+    # --- Double check before execution ---
     latest = supabase.table("entries").select("id", count="exact").execute()
     latest_count = latest.count or 0
 
@@ -57,12 +74,45 @@ if st.button("申し込む"):
         st.stop()
 
     # --- INSERT ---
-    insert = supabase.table("entries").insert({}).execute()
 
-    if insert.data:
-        receipt_id = insert.data[0]["id"]
-        st.success("受付が完了しました")
-        st.write(f"✅ 受付番号：**{receipt_id}**")
-        st.write(f"受付日時：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    else:
-        st.error("受付処理に失敗しました。時間をおいて再度お試しください。")
+    try:
+        # --- INSERT ---
+        insert = supabase.table("entries").insert({
+            "dlr_name": name,
+            "vin": vin,
+            "created_at": datetime.utcnow().isoformat()
+        }).execute()
+
+        if insert.data:
+            receipt_id = insert.data[0]["id"]
+            st.success("受付が完了しました")
+            st.write(f"✅ 受付番号：**{receipt_id}**")
+            st.write(f"VIN：{vin}")
+            st.write(f"受付日時：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            st.write("専用フォームに受付番号(ID)を記載して発注して下さい。")
+            st.write("誤り等ございました、TMJまでご連絡ください。")
+        else:
+            st.error("受付処理に失敗しました")
+
+    except Exception as e:
+        st.error(f"エラー: {e}")
+
+
+# =====================
+# 一覧表示
+# =====================
+st.subheader("登録済み一覧")
+
+
+list_data = supabase.table("entries").select("id, vin").order("id").execute()
+
+if list_data.data:
+    df = pd.DataFrame(list_data.data)
+    st.dataframe(df)
+else:
+    st.write("まだ登録がありません")
+
+
+
+
+
