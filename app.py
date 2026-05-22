@@ -6,7 +6,7 @@ import pandas as pd
 # =====================
 # 設定
 # =====================
-MAX_LIMIT = 10  # 上限数
+MAX_LIMIT = int(st.secrets["LIMIT_CNT"])  # 上限数
 
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_ANON_KEY"]
