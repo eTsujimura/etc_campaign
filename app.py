@@ -113,7 +113,7 @@ if list_data.data:
         "vin": "VIN"
     })
 
-    st.dataframe(df)
+    st.dataframe(df, height=300)
 else:
     st.write("まだ登録がありません")
 
