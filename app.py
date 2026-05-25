@@ -89,8 +89,8 @@ if st.button("申し込む"):
             st.write(f"✅ 受付番号：**{receipt_id}**")
             st.write(f"VIN：{vin}")
             st.write(f"受付日時：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-            st.write("専用フォームに受付番号(ID)を記載して発注して下さい。")
-            st.write("誤り等ございました、TMJまでご連絡ください。")
+            st.write("専用フォームに受付番号を記載して発注して下さい。")
+            st.write("誤り・問題等ございましたらTMJまでご連絡ください。")
         else:
             st.error("受付処理に失敗しました")
 
