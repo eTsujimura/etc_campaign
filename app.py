@@ -42,8 +42,8 @@ st.metric(label="現在の受付数", value=cnt,)
 # =====================
 # Input
 # =====================
-name = st.text_input("ディーラー名")
-vin = st.text_input("VIN")
+name = st.text_input("ディーラー名(登録済一覧には表示されません)")
+vin = st.text_input("VIN(下6桁)")
 # st.warning("VIN以外も入力可能ですが、公開URLですのでお客様の名前などは入力しないでください")
 
 
@@ -90,6 +90,7 @@ if st.button("申し込む"):
             st.write(f"VIN：{vin}")
             st.write(f"受付日時：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             st.write("専用フォームに受付番号を記載して発注して下さい。")
+            st.write("登録の確認はこのページの下記「登録内容一覧」をご確認ください。")
             st.write("誤り・問題等ございましたらTMJまでご連絡ください。")
         else:
             st.error("受付処理に失敗しました")
