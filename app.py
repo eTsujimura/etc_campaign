@@ -32,8 +32,8 @@ current_count = count_response.count or 0
 # =====================
 # Display
 # =====================
-st.title("ETCキャンペーン受付状況")
-st.warning("対象モデルはScrambler 400X/400XC, SPEED 400, Thruxton 400及びTracker 400です。")
+st.title("「新しい愛車に新しい一着を」キャンペーン受付状況")
+st.warning("対象モデルはすべての３気筒モデルです")
 
 
 cnt = f"**{current_count} / {MAX_LIMIT}**"
@@ -89,7 +89,7 @@ if st.button("申し込む"):
             st.write(f"✅ 受付番号：**{receipt_id}**")
             st.write(f"VIN：{vin}")
             st.write(f"受付日時：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-            st.write("専用フォームに受付番号を記載して発注して下さい。")
+            ## st.write("専用フォームに受付番号を記載して発注して下さい。")
             st.write("登録の確認はこのページの下記「登録内容一覧」をご確認ください。")
             st.write("誤り・問題等ございましたらTMJまでご連絡ください。")
         else:
