@@ -32,8 +32,8 @@ current_count = count_response.count or 0
 # =====================
 # Display
 # =====================
-st.title("ETCキャンペーン受付状況")
-st.warning("対象モデルはScrambler 400X/400XC, SPEED 400, Thruxton 400及びTracker 400です。")
+st.title("新しい愛車に新しい一着をキャンペーン受付状況")
+st.warning("３気筒モデル全てです")
 
 
 cnt = f"**{current_count} / {MAX_LIMIT}**"
