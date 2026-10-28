@@ -58,7 +58,6 @@ if accepting:
         if not name or not vin:
             st.warning("ディーラー名とVINを入力してください")
             st.stop()
-            st.rerun()
 
         import re
 
