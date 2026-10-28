@@ -92,7 +92,10 @@ if accepting:
                 st.write("専用フォームに受付番号を記載して発注して下さい。")
                 st.write("登録の確認はこのページの下記「登録内容一覧」をご確認ください。")
                 st.write("誤り・問題等ございましたらTMJまでご連絡ください。")
-                st.rerun()
+
+                if st.button("OK(リロード)"):
+                    st.rerun()
+
             else:
                 st.error("受付処理に失敗しました")
 
