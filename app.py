@@ -11,9 +11,6 @@ MAX_LIMIT = int(st.secrets["LIMIT_CNT"])  # 上限数
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_ANON_KEY"]
 
-from supabase.client import ClientOptions
-import os
-
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # =====================
@@ -55,9 +52,17 @@ if accepting:
 # 申込ボタン
 # =====================
     if st.button("申し込む"):
+        name = name.strip()
+        vin = vin.strip().upper()
         
         if not name or not vin:
             st.warning("ディーラー名とVINを入力してください")
+            st.stop()
+
+        import re
+
+        if not re.match(r"^[A-Za-z0-9]{6}$", vin):
+            st.error("VINは英数字6桁で入力してください")
             st.stop()
 
         # --- Double check before execution ---
@@ -109,7 +114,7 @@ if list_data.data:
         "vin": "VIN"
     })
 
-    st.dataframe(df, height=300)
+    st.dataframe(df, height=300, use_container_width=True)
 else:
     st.write("まだ登録がありません")
 
