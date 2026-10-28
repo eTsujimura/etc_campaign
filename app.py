@@ -11,17 +11,10 @@ MAX_LIMIT = int(st.secrets["LIMIT_CNT"])  # 上限数
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_ANON_KEY"]
 
-# （SSL検証なし）
-import ssl
-from httpx import Client as HttpxClient
 from supabase.client import ClientOptions
 import os
 
-http_client = HttpxClient(verify=False)
-options = ClientOptions(httpx_client=http_client)
-
-
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY, options)
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # =====================
 # Get current count
